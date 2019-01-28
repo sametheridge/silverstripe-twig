@@ -46,7 +46,12 @@ trait TwigRenderer {
             $templates = [$templates];
         }
 
-        return $this->renderTwig($templates, $data);
+        try {
+            return $this->renderTwig($templates, $data);
+        } catch (\InvalidArgumentException $e) {
+            return parent::renderWith($templates, $customFields);
+        }
+
     }
 
     /**
@@ -110,7 +115,7 @@ trait TwigRenderer {
                 }
             }
         }
-        throw new \InvalidArgumentException("No templates for " . implode(', ', $templates) . " exist");
+        throw new \InvalidArgumentException("No templates for " . print_r($templates, 1) . " exist");
     }
 
     /**
